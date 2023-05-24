@@ -1,0 +1,8 @@
+D:\repos\URD.TeklaScripts\URD.FabricationSetIssue\bin\Debug\URD.FabricationSetIssue.exe.config
+D:\repos\URD.TeklaScripts\URD.FabricationSetIssue\bin\Debug\URD.FabricationSetIssue.exe
+D:\repos\URD.TeklaScripts\URD.FabricationSetIssue\bin\Debug\URD.FabricationSetIssue.pdb
+D:\repos\URD.TeklaScripts\ObjDir\2019\URD.FabricationSetIssue\URD.FabricationSetIssue.csproj.AssemblyReference.cache
+D:\repos\URD.TeklaScripts\ObjDir\2019\URD.FabricationSetIssue\URD.FabricationSetIssue.csproj.SuggestedBindingRedirects.cache
+D:\repos\URD.TeklaScripts\ObjDir\2019\URD.FabricationSetIssue\URD.FabricationSetIssue.csproj.CoreCompileInputs.cache
+D:\repos\URD.TeklaScripts\ObjDir\2019\URD.FabricationSetIssue\URD.FabricationSetIssue.exe
+D:\repos\URD.TeklaScripts\ObjDir\2019\URD.FabricationSetIssue\URD.FabricationSetIssue.pdb
