@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using Tekla.Structures.Model;
 
 namespace URD.FabricationSetIssue
@@ -17,13 +20,14 @@ namespace URD.FabricationSetIssue
             string ncTubesDirectory = "NC_tubes";
 
             CreateMainDirectory(modelPath, mainDirectoryName);
-        }
+            List<string> ncSettings = GetNCSettingsFromModel(modelPath);
+        }        
 
         /// <summary>
         /// Creating a main directory for storing export files in the model directory
         /// </summary>
-        /// <param name="modelPath">the path to the model directory</param>
-        /// <param name="directoryName">main directory</param>
+        /// <param name="modelPath">The path to the model directory</param>
+        /// <param name="directoryName">Main directory</param>
         private static void CreateMainDirectory(string modelPath,
                                                 string directoryName)
         {
@@ -37,6 +41,24 @@ namespace URD.FabricationSetIssue
             {
                 Directory.CreateDirectory(directoryPath);
             }
+        }
+
+        /// <summary>
+        /// Getting a list of settings to export
+        /// </summary>
+        /// <param name="modelPath">The path to the model directory</param>
+        /// <returns>List of available settings in the model</returns>
+        /// <exception cref="NotImplementedException"></exception>
+        private static List<string> GetNCSettingsFromModel(string modelPath)
+        {
+            DirectoryInfo modelInfo = new DirectoryInfo(modelPath);
+            List<string> settings = new List<string>();
+            foreach(FileInfo file in modelInfo.GetFiles("*.ncfs", SearchOption.AllDirectories))
+            {
+                int index = file.Name.IndexOf('.');
+                settings.Add(file.Name.Remove(index));
+            }
+            return settings;
         }
     }
 }
