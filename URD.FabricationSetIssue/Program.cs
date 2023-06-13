@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+using System.Windows;
 using Tekla.Structures.Model;
+using TSMO = Tekla.Structures.Model.Operations;
 
 namespace URD.FabricationSetIssue
 {
@@ -15,12 +16,11 @@ namespace URD.FabricationSetIssue
             string mainDirectoryName = "FabricationSet";
             string ncPlatesDirectory = "NC_plates";
             string ncProfilesDirectory = "NC_profiles";
-            string dxfPlatesDirectory = "DXF_plates";
-            string dxfProfilesDirectory = "DXF_profiles";
-            string ncTubesDirectory = "NC_tubes";
 
             CreateMainDirectory(modelPath, mainDirectoryName);
             List<string> ncSettings = GetNCSettingsFromModel(modelPath);
+            ncSettings = CheckJVKCSettings(ncSettings);
+            CreateNCFiles(ncSettings, modelPath, mainDirectoryName, ncPlatesDirectory, ncProfilesDirectory);
         }        
 
         /// <summary>
@@ -59,6 +59,65 @@ namespace URD.FabricationSetIssue
                 settings.Add(file.Name.Remove(index));
             }
             return settings;
+        }
+
+        /// <summary>
+        /// Checks if there are JVKC environment settings.
+        /// </summary>
+        /// <param name="settings">NC settings in model folder.</param>
+        /// <returns>List with only JVKC settings</returns>
+        private static List<string> CheckJVKCSettings(List<string> settings)
+        {
+            int counter = 0;
+            for(int i = 0; i < settings.Count; i++)
+            {
+                if (settings[i].Contains("JVKC"))
+                {
+                    counter++;
+                }
+                else
+                {
+                    settings[i] = string.Empty;
+                }
+            }
+            if(counter != 2)
+            {
+                MessageBox.Show("There aren't JVKC settings for nc files in model folder.");
+            }
+            return settings;
+        }
+
+        /// <summary>
+        /// Create nc files for the JVKC environment.
+        /// </summary>
+        /// <param name="settings">JVKC settings</param>
+        /// <param name="modelPath">Path to model folder</param>
+        /// <param name="mainDirectory">Directiry for all nc files</param>
+        /// <param name="platesDir">Directory for plates</param>
+        /// <param name="profilesDir">Directory for profiles</param>
+        private static void CreateNCFiles(List<string> settings,
+            string modelPath,
+            string mainDirectory,
+            string platesDir,
+            string profilesDir)
+        {
+            string platesPath = modelPath + @"\" + mainDirectory + @"\" + platesDir + @"\";
+            string profilesPath = modelPath + @"\" + mainDirectory + @"\" + profilesDir +@"\";
+            string platesJVKC = string.Empty;
+            string profilesJVKC = string.Empty;
+            foreach(var item in settings)
+            {
+                if(item.Contains("plates"))
+                {
+                    platesJVKC = item;
+                }
+                if (item.Contains("profiles"))
+                {
+                    profilesJVKC = item;
+                }
+            }
+            bool ncPlates = TSMO.Operation.CreateNCFilesFromSelected(platesJVKC, platesPath);
+            bool ncProfiles = TSMO.Operation.CreateNCFilesFromSelected(profilesJVKC, profilesPath);
         }
     }
 }
